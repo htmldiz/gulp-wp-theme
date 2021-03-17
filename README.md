@@ -1,4 +1,4 @@
-# Gulp Wordpress theme
+# Gulp 4 Wordpress theme
 
 ------------------
 ### Basic features
