@@ -1,8 +1,8 @@
 {
-  "themename"   : "gulp4-rep",
+  "themename"   : "gulp-wp-theme",
   "author"      : "Marcus {code}",
   "version"     : "0.1",
-  "description" : "gulp4-rep",
+  "description" : "gulp-wp-theme",
   "port"        : 35165,
   "tags"        : "one-column, flexible-header, accessibility-ready, custom-colors, custom-menu, custom-logo, editor-style, featured-images, footer-widgets, rtl-language-support, sticky-post, threaded-comments, translation-ready",
   "assets"      : "assets",
