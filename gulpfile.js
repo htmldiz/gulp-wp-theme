@@ -1,6 +1,7 @@
 const { watch, series, src, dest,parallel } = require('gulp');
 const path           = require("path");
 const concat         = require('gulp-concat');
+const autoprefixer   = require('gulp-autoprefixer');
 const sass           = require('gulp-sass');
 const del            = require('del');
 const fs             = require('fs');
@@ -15,6 +16,9 @@ const jpegRecompress = require('imagemin-jpeg-recompress');
 const cache          = require('gulp-cache')
 const list_plugins   = require('./list_plugins.js');
 const livereload     = require('gulp-livereload');
+const imageminSvgo   = require('imagemin-svgo');
+const {extendDefaultPlugins} = require('svgo');
+
 const con = {
    'scss'   : './'+conf.dev+'/'+conf.scss+'/',
    'css'    : './'+conf.dev+'/'+conf.css+'/',
@@ -49,6 +53,7 @@ function sass_tocss() {
     return src(con.scss + '**/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(cssnano({zindex: false}))
+        .pipe(autoprefixer(['last 15 versions']))
         .pipe(dest(con.temp.css))
     // cb();
 }
@@ -56,6 +61,12 @@ function css() {
     return src(con.css + '**/*.css')
         .pipe(cssnano({zindex: false}))
         .pipe(dest(con.temp.css));
+    // cb();
+}
+function fonts() {
+    del.sync(con.assets.fonts);
+    return src(con.fonts + '**/*.{woff,woff2,ttf,otf,svg}')
+        .pipe(dest(con.assets.fonts));
     // cb();
 }
 async function csstemp(cb) {
@@ -91,6 +102,8 @@ function watch_change() {
     watch(con.temp.css+'**/*.css', series(csstemp));
     // watch(con.js+'**/*.js', series(javascripttmp));
     watch(con.js+'**/*.js', series(javascript));
+    watch(con.images + '**/*.{png,jpg,jpeg,svg}', series(images));
+    watch(con.fonts + '**/*.{woff,woff2,ttf,otf,svg}', series(fonts));
 }
 function javascripttmp(cb) {
     return src(con.js + '**/*.js')
@@ -108,5 +121,25 @@ function javascript(cb) {
         .pipe(livereload());
     // cb();
 }
-exports.default = series( clean, sass_tocss, csstemp, pluginsScripts, javascript, watch_change );
-exports.build = series( clean, sass_tocss, csstemp, pluginsScripts, javascripttmp );
+function images() {
+    del.sync(con.assets.images);
+    return src(con.images + '**/*.{png,jpg,jpeg,svg}')
+        .pipe(cache(imagemin([
+            imagemin.gifsicle({interlaced: true}),
+            jpegRecompress({
+                loops:4,
+                min: 50,
+                max: 95,
+                quality:'high'
+            }),
+            imagemin.optipng({optimizationLevel: 7}),
+            imageminSvgo({
+                plugins: extendDefaultPlugins([
+                    {name: 'removeViewBox', active: false}
+                ])
+            })
+        ])))
+        .pipe(dest(con.assets.images))
+}
+exports.default = series( clean, fonts, images, sass_tocss, csstemp, pluginsScripts, javascript, watch_change );
+exports.build = series( clean, fonts, images, sass_tocss, csstemp, pluginsScripts, javascripttmp );

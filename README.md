@@ -1,3 +1,9 @@
+### v1.0.1
+
+* Added images optimizer
+* Added css autoprefixer
+* Added fonts folder
+
 # Gulp 4 Wordpress theme
 
 ------------------
