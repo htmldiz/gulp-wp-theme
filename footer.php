@@ -1,7 +1,5 @@
-<?php
-if ( is_active_sidebar( 'sidebar-1' ) ) :
-	dynamic_sidebar( 'sidebar-1' );
-endif;
-wp_footer(); ?>
+
+<!-- display footer -->
+<?php wp_footer(); ?>
 </body>
 </html>
