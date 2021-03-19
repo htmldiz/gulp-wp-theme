@@ -1,22 +1,3 @@
-### v1.0.3
-* Added php wacher now you can change php files and it will live reload page
-
-### v1.0.2
-
-* Added gulp comands for make pages
-  * to make frontpage run command 
-  ```
-  gulp make:frontpage
-  ```
-  * to make page template with name "mytemplatename" run command
-  ```
-  gulp make:template -mytemplatename
-  ```
-
-* Added images optimizer
-* Added css autoprefixer
-* Added fonts folder
-
 # Gulp 4 Wordpress theme
 
 ------------------
@@ -94,3 +75,23 @@ gulp
 * js - Theme js folder name
 * images - Theme images folder name
 * fonts - Theme fonts folder name
+
+
+### v1.0.2
+
+* Added gulp comands for make pages
+  * to make frontpage run command
+  ```
+  gulp make:frontpage
+  ```
+  * to make page template with name "mytemplatename" run command
+  ```
+  gulp make:template -mytemplatename
+  ```
+
+* Added images optimizer
+* Added css autoprefixer
+* Added fonts folder
+
+### v1.0.3
+* Added php wacher now you can change php files and it will live reload page
