@@ -1,3 +1,6 @@
+### v1.0.3
+* Added php wacher now you can change php files and it will live reload page
+
 ### v1.0.2
 
 * Added gulp comands for make pages

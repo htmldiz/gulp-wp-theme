@@ -103,7 +103,10 @@ function watch_change() {
     // watch(con.js+'**/*.js', series(javascripttmp));
     watch(con.js+'**/*.js', series(javascript));
     watch(con.images + '**/*.{png,jpg,jpeg,svg}', series(images));
-    watch(con.fonts + '**/*.{woff,woff2,ttf,otf,svg}', series(fonts));
+    let watcherphp = watch(['**/*.php']);
+    watcherphp.on('change', function(path, stats) {
+        livereload.reload(path);
+    });
 }
 function javascripttmp(cb) {
     return src(con.js + '**/*.js')
@@ -118,6 +121,11 @@ function javascript(cb) {
     return src(con.js + '**/*.js')
         .pipe(concat('all.js'))
         .pipe(dest(con.assets.js))
+        .pipe(livereload());
+    // cb();
+}
+function php(cb) {
+    return src('**/*.php')
         .pipe(livereload());
     // cb();
 }
