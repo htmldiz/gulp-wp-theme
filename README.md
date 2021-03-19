@@ -1,4 +1,14 @@
-### v1.0.1
+### v1.0.2
+
+* Added gulp comands for make pages
+  * to make frontpage run command 
+  ```
+  gulp make:frontpage
+  ```
+  * to make page template with name "mytemplatename" run command
+  ```
+  gulp make:template -mytemplatename
+  ```
 
 * Added images optimizer
 * Added css autoprefixer
