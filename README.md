@@ -77,16 +77,36 @@ gulp
 * fonts - Theme fonts folder name
 
 
-### v1.0.2
+### v1.0.4
 
-* Added gulp comands for make pages
-  * to make frontpage run command
+* Added npm comands for make pages
+* **To make frontpage run command**
   ```
-  gulp make:frontpage
+  npm run make f
+    ```
+  OR
+    ```
+  npm run make front
   ```
-  * to make page template with name "mytemplatename" run command
+* **To make page template with name "mytemplate" run command**
   ```
-  gulp make:template -mytemplatename
+  npm run make templ mytemplate
+    ```
+  OR
+    ```
+  npm run make t mytemplate
+  ```
+  OR
+    ```
+  npm run make template mytemplate
+  ```
+* **To make single for post type name "myposttype" run command**
+    ```
+  npm run make s myposttype
+  ```
+  OR
+    ```
+  npm run make single myposttype
   ```
 
 * Added images optimizer
@@ -95,3 +115,7 @@ gulp
 
 ### v1.0.3
 * Added php wacher now you can change php files and it will live reload page
+
+### v1.0.4
+* Added webp support PNGs and JPEGs now automaticly convertings to webp format in assets folder
+* Added 

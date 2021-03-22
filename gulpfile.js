@@ -39,6 +39,11 @@ const con = {
         'fonts'  : './'+conf.temp+'/'+conf.fonts+'/',
     },
 };
+function convertImageToWebp() {
+    return src([con.assets.images + '**/*.{png,jpg,jpeg}', '!webp'])
+        .pipe(webp())
+        .pipe(dest(con.assets.images + '/webp'))
+}
 function clean(cb) {
     del.sync(con.assets.path);
     cb();
@@ -103,6 +108,7 @@ function watch_change() {
     // watch(con.js+'**/*.js', series(javascripttmp));
     watch(con.js+'**/*.js', series(javascript));
     watch(con.images + '**/*.{png,jpg,jpeg,svg}', series(images));
+    watch(con.assets.images + '**/*.{png,jpg,jpeg}', series(convertImageToWebp));
     let watcherphp = watch(['**/*.php']);
     watcherphp.on('change', function(path, stats) {
         livereload.reload(path);
@@ -129,45 +135,9 @@ function php(cb) {
         .pipe(livereload());
     // cb();
 }
-async function makefrontpage(cb) {
-    out_path = './front-page.php';
-    style_out = "<?php" + "\n" +
-        "get_header();" + "\n" +
-        "while ( have_posts() ) : the_post(); ?>" + "\n" +"\n" +
-        "<?php endwhile;" + "\n" +
-        "get_footer(); ?>";
-    fs.writeFile(out_path, style_out, function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-    // console.log(process.argv.slice(3));
-    await Promise.resolve('');
-    cb();
-}
-async function maketemplate(cb) {
-    var name         = process.argv.slice(3)[0];
-    var templatefile = "template" + name;
-    var templatename = name.replace(new RegExp('-'),' ');
-    templatename     = templatename.charAt(1).toUpperCase() + templatename.slice(2);
-    out_path = './' + templatefile + '.php';
-    style_out = "<?php" + "\n" +
-        "/* Template Name: "+templatename+" template */" + "\n" +
-        "get_header();" + "\n" +
-        "while ( have_posts() ) : the_post(); ?>" + "\n" +"\n" +
-        "<?php endwhile;" + "\n" +
-        "get_footer(); ?>";
-    fs.writeFile(out_path, style_out, function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-    await Promise.resolve('File '+templatefile+'.php created!');
-    return cb();
-    // console.log(process.argv.slice(3));
-}
-function images() {
-    del.sync(con.assets.images);
+
+function images(cb) {
+    // del.sync(con.assets.images);
     return src(con.images + '**/*.{png,jpg,jpeg,svg}')
         .pipe(cache(imagemin([
             imagemin.gifsicle({interlaced: true}),
@@ -178,15 +148,13 @@ function images() {
                 quality:'high'
             }),
             imagemin.optipng({optimizationLevel: 7}),
-            imageminSvgo({
-                plugins: extendDefaultPlugins([
-                    {name: 'removeViewBox', active: false}
-                ])
-            })
+            // imageminSvgo({
+            //     plugins: extendDefaultPlugins([
+            //         {name: 'removeViewBox', active: false}
+            //     ])
+            // })
         ])))
-        .pipe(dest(con.assets.images))
+        .pipe(dest(con.assets.images));
 }
-exports.default = series( clean, fonts, images, sass_tocss, csstemp, pluginsScripts, javascript, watch_change );
-exports.build = series( clean, fonts, images, sass_tocss, csstemp, pluginsScripts, javascripttmp );
-exports['make:frontpage']  = series( makefrontpage );
-exports['make:template']   = series( maketemplate );
+exports.default = series( clean, fonts, images,convertImageToWebp, sass_tocss, csstemp, pluginsScripts, javascript, watch_change );
+exports.build = series( clean, fonts, images,convertImageToWebp, sass_tocss, csstemp, pluginsScripts, javascripttmp );
