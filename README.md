@@ -76,6 +76,36 @@ gulp
 * images - Theme images folder name
 * fonts - Theme fonts folder name
 
+### v1.0.5
+* Added php comands for make pages
+* **To make frontpage run command**
+  ```
+  php make f
+    ```
+  OR
+    ```
+  php make front
+  ```
+* **To make page template with name "mytemplate" run command**
+  ```
+  php templ mytemplate
+    ```
+  OR
+    ```
+  php t mytemplate
+  ```
+  OR
+    ```
+  php template mytemplate
+  ```
+* **To make single for post type name "myposttype" run command**
+    ```
+  php s myposttype
+  ```
+  OR
+    ```
+  php single myposttype
+  ```
 
 ### v1.0.4
 
