@@ -76,6 +76,14 @@ gulp
 * images - Theme images folder name
 * fonts - Theme fonts folder name
 
+### v1.0.6
+* Added php comands for make pages
+* **To make part run command**
+  ```
+  php make part top-side
+    ```
+* It will generate "top-side" part in side parts folder
+
 ### v1.0.5
 * Added php comands for make pages
 * **To make frontpage run command**

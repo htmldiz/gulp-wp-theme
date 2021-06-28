@@ -23,7 +23,7 @@ if(!class_exists('FileMakerThemeFiles')){
 			$f = fopen($this->path.'/'.$this->file_name,'a+');
 			fwrite($f,$this->string);
 			fclose($f);
-			echo "file $this->file_name are created";
+			echo "file $this->file_name are created \n";
 		}
 	}
 }
@@ -52,6 +52,10 @@ if(!class_exists('MakerThemeFiles')){
 		        $command = 'create_template';
 		        $this->maketemplate = true;
 		        break;
+		        case 'part':
+		        $command = 'create_part';
+		        $this->maketemplate = true;
+		        break;
 	        }
 	        call_user_func( array( $this, $command ), $args );
         }
@@ -75,6 +79,18 @@ if(!class_exists('MakerThemeFiles')){
 	        $this->after_create_content();
 	        $fileMaker = new FileMakerThemeFiles($this->content,"template-$templname.php");
 	        $fileMaker->make_file();
+        }
+        function create_part($args){
+        	$templname = $args[2];
+	        $template_name = ucfirst($templname);
+	        $template_name = str_replace('-',' ',$template_name);
+	        $templname_first = explode("-",$templname);
+	        $templname_first = reset($templname_first);
+	        $template_removed_first = str_replace($templname_first.'-','',$templname);
+	        $this->content = "<?php /* Part: $template_name */ ?>"."\n";
+	        $fileMaker = new FileMakerThemeFiles($this->content,"parts".DIRECTORY_SEPARATOR."$templname.php");
+	        $fileMaker->make_file();
+	        echo "<?php get_template_part('parts/$templname_first','$template_removed_first'); ?> \n";
         }
 	    function after_create_content(){
 		    $this->content .= "get_header();"."\n";
