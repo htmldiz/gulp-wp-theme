@@ -94,10 +94,11 @@ async function csstemp(cb) {
         if (err) {
             return console.log(err);
         }
+        // livereload.reload(out_path);
     });
-    await Promise.resolve('');
-    out_path = path.resolve(out_path);
-    livereload.reload(out_path);
+    // await Promise.resolve('');
+    // out_path = path.resolve(out_path);
+
     cb();
 }
 function watch_change() {
@@ -111,6 +112,10 @@ function watch_change() {
     watch(con.assets.images + '**/*.{png,jpg,jpeg}', series(convertImageToWebp));
     let watcherphp = watch(['**/*.php']);
     watcherphp.on('change', function(path, stats) {
+        livereload.reload(path);
+    });
+    let watchercss = watch(['./style.css']);
+    watchercss.on('change', function(path, stats) {
         livereload.reload(path);
     });
 }
@@ -140,7 +145,6 @@ function images(cb) {
     // del.sync(con.assets.images);
     return src(con.images + '**/*.{png,jpg,jpeg,svg}')
         .pipe(cache(imagemin([
-            imagemin.gifsicle({interlaced: true}),
             jpegRecompress({
                 loops:4,
                 min: 50,
@@ -148,11 +152,6 @@ function images(cb) {
                 quality:'high'
             }),
             imagemin.optipng({optimizationLevel: 7}),
-            // imageminSvgo({
-            //     plugins: extendDefaultPlugins([
-            //         {name: 'removeViewBox', active: false}
-            //     ])
-            // })
         ])))
         .pipe(dest(con.assets.images));
 }
