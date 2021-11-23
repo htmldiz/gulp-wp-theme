@@ -60,22 +60,18 @@ function sass_tocss() {
         .pipe(cssnano({zindex: false}))
         .pipe(autoprefixer(['last 15 versions']))
         .pipe(dest(con.temp.css))
-    // cb();
 }
 function css() {
     return src(con.css + '**/*.css')
         .pipe(cssnano({zindex: false}))
         .pipe(dest(con.temp.css));
-    // cb();
 }
 function fonts() {
     del.sync(con.assets.fonts);
     return src(con.fonts + '**/*.{woff,woff2,ttf,otf,svg}')
         .pipe(dest(con.assets.fonts));
-    // cb();
 }
 async function csstemp(cb) {
-    // cb
     let   out_file    = "";
     let   style_out   = "";
     let out_path    = "./style.css";
@@ -95,9 +91,6 @@ async function csstemp(cb) {
             return console.log(err);
         }
     });
-    // await Promise.resolve('');
-    // out_path = path.resolve(out_path);
-
     cb();
 }
 function watch_change() {
