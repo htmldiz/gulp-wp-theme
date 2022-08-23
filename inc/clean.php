@@ -4,7 +4,10 @@ class Onetheme_theme
 
 	function __construct()
 	{
-		add_action(    'init'                  , array($this,'sclear_wp'), 9999 );
+        global $pagenow;
+        if(!is_admin() && $pagenow != 'wp-login.php'){
+            add_action(    'init'                  , array($this,'sclear_wp'), 9999 );
+        }
 		remove_action( 'wp_head'           , 'feed_links_extra', 3 );
 		remove_action( 'wp_head'           , 'feed_links', 2 );
 		remove_action( 'wp_head'           , 'rsd_link' );
