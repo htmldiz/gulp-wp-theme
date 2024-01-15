@@ -1,23 +1,24 @@
-const { watch, series, src, dest,parallel } = require('gulp');
-const path           = require("path");
-const concat         = require('gulp-concat');
-const autoprefixer   = require('gulp-autoprefixer');
-const sass           = require('gulp-sass')(require('sass'));
-const del            = require('del');
-const fs             = require('fs');
-const gulpIf         = require('gulp-if');
-const cssnano        = require('gulp-cssnano');
-const useref         = require('gulp-useref');
-const uglify         = require('gulp-uglify')
-const imagemin       = require('gulp-imagemin')
-const conf           = require('./config.json');
-const webp           = require('gulp-webp');
-const jpegRecompress = require('imagemin-jpeg-recompress');
-const cache          = require('gulp-cache')
-const list_plugins   = require('./list_plugins.js');
-const livereload     = require('gulp-livereload');
-const imageminSvgo   = require('imagemin-svgo');
-const {extendDefaultPlugins} = require('svgo');
+import gulp from 'gulp'
+const { watch, series, src, dest,parallel } = gulp;
+import path          from "path";
+import concat        from 'gulp-concat';
+import autoprefixer  from 'gulp-autoprefixer';
+import gulpSass      from 'gulp-sass';
+import dartSass      from  'sass';
+const sass = gulpSass(dartSass);
+import {deleteSync} from 'del';
+import fs            from 'fs';
+import cssnano       from 'gulp-cssnano';
+import uglify        from 'gulp-uglify';
+import imagemin      from 'gulp-imagemin';
+import conf          from './config.json' with { type: "json" };
+import webp          from 'gulp-webp';
+import jpegRecompress from 'imagemin-jpeg-recompress';
+import cache         from 'gulp-cache';
+const  list_plugins  = [
+  './node_modules/jquery/dist/jquery.min.js',
+];
+import livereload    from 'gulp-livereload';
 
 const con = {
    'scss'   : './'+conf.dev+'/'+conf.scss+'/',
@@ -45,7 +46,7 @@ function convertImageToWebp() {
         .pipe(dest(con.assets.images + '/webp'))
 }
 function clean(cb) {
-    del.sync(con.assets.path);
+    deleteSync(con.assets.path);
     cb();
 }
 function pluginsScripts(cb) {
@@ -67,7 +68,7 @@ function css() {
         .pipe(dest(con.temp.css));
 }
 function fonts() {
-    del.sync(con.assets.fonts);
+    deleteSync(con.assets.fonts);
     return src(con.fonts + '**/*.{woff,woff2,ttf,otf,svg}')
         .pipe(dest(con.assets.fonts));
 }
@@ -134,7 +135,7 @@ function php(cb) {
 }
 
 function images(cb) {
-    // del.sync(con.assets.images);
+    // deleteSync(con.assets.images);
     return src(con.images + '**/*.{png,jpg,jpeg,svg}')
         .pipe(cache(imagemin([
             jpegRecompress({
@@ -147,5 +148,9 @@ function images(cb) {
         ])))
         .pipe(dest(con.assets.images));
 }
-exports.default = series( clean, fonts, images,convertImageToWebp, sass_tocss, csstemp, pluginsScripts, javascript, watch_change );
-exports.build = series( clean, fonts, images,convertImageToWebp, sass_tocss, csstemp, pluginsScripts, javascripttmp );
+const Default = series( clean, fonts, images,convertImageToWebp, sass_tocss, csstemp, pluginsScripts, javascript, watch_change );
+const Build = series( clean, fonts, images,convertImageToWebp, sass_tocss, csstemp, pluginsScripts, javascripttmp );
+export{
+  Default as default,
+  Build as build
+}

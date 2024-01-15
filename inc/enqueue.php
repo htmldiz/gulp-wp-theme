@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 /**
- * 
+ *
  */
 class Onetheme_enqueue
 {
-	
+
 	function __construct()
 	{
 		add_action( 'wp_enqueue_scripts', array( $this , 'enqueue_scripts' ) );
@@ -26,5 +26,4 @@ class Onetheme_enqueue
         }
 	}
 }
-$Onetheme_enqueue = new Onetheme_enqueue();
-?>
+new Onetheme_enqueue();
